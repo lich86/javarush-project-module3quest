@@ -75,21 +75,20 @@ public class LogicServlet extends HttpServlet {
             }
         }
 
-        Question question = null;
-        ArrayList<Answer> answers = null;
+        Question question;
+        ArrayList<Answer> answers;
         try {
             question = questionRepository.getQuestionById(questionId);
             answers = question.getAnswers();
+            Collections.shuffle(answers);
+            request.setAttribute("question", question);
+            request.setAttribute("answers", answers);
+            currentSession.setAttribute("chapterNumber", chapterNumber);
         } catch (NullPointerException e) {
             //вопроса или ответа с таким номером не существует
             log.error("Проблема с вопросом id [{}] (нет такого вопроса, либо у него не установлены ответы)", questionId);
             getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
         }
-
-        Collections.shuffle(answers);
-        request.setAttribute("question", question);
-        request.setAttribute("answers", answers);
-        currentSession.setAttribute("chapterNumber", chapterNumber);
 
         getServletContext().getRequestDispatcher("/play.jsp").forward(request, response);
     }
