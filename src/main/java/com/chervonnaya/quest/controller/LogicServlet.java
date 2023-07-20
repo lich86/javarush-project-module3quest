@@ -6,6 +6,7 @@ import com.chervonnaya.quest.model.ChoiceType;
 import com.chervonnaya.quest.model.Question;
 import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.repository.QuestionRepository;
+import com.chervonnaya.quest.service.StatisticsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,6 +38,10 @@ public class LogicServlet extends HttpServlet {
         int questionId = 1;
         int chapterNumber = 1;
 
+        int counter = StatisticsUtil.getStatistics(request, response,"counter");
+        int counterWon = StatisticsUtil.getStatistics(request, response,"counterWon");
+        int counterLost = StatisticsUtil.getStatistics(request, response,"counterLost");
+
         if(request.getParameter("answerid")  != null) {
             int answerId = Integer.parseInt(request.getParameter("answerid"));
             Answer answer = answerRepository.getAnswerById(answerId);
@@ -46,10 +51,16 @@ public class LogicServlet extends HttpServlet {
                 } catch (NullPointerException e) {
                     //у вопроса нет такого поля, логи
                 }
+                chapterNumber = StatisticsUtil.getStatistics(request, response,"chapterNumber");
+                chapterNumber++;
             } else if (answer.getChoiceType() == ChoiceType.LOST) {
                 request.setAttribute("loosingCause", answer.getLoosingCause().getText());
+                StatisticsUtil.setStatistics(request, response,"counter", ++counter);
+                StatisticsUtil.setStatistics(request, response,"counterLost", ++counterLost);
                 getServletContext().getRequestDispatcher("/gameover.jsp").forward(request, response);
             } else if(answer.getChoiceType() == ChoiceType.WIN) {
+                StatisticsUtil.setStatistics(request, response,"counter", ++counter);
+                StatisticsUtil.setStatistics(request, response,"counterWon", ++counterWon);
                 getServletContext().getRequestDispatcher("/youwon.jsp").forward(request, response);
             } else {
                 //тут какая-то ошибка, нужно логировать
@@ -69,7 +80,6 @@ public class LogicServlet extends HttpServlet {
             //вопроса или ответа с таким номером не существует
 
         }
-
 
         getServletContext().getRequestDispatcher("/play.jsp").forward(request, response);
     }

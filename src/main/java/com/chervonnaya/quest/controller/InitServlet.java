@@ -1,5 +1,7 @@
 package com.chervonnaya.quest.controller;
 
+import com.chervonnaya.quest.service.StatisticsUtil;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,11 @@ public class InitServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Создание новой сессии
         HttpSession currentSession = request.getSession(true);
+
+        StatisticsUtil.getStatistics(request, response,"counter");
+        StatisticsUtil.getStatistics(request, response,"counterWon");
+        StatisticsUtil.getStatistics(request, response,"counterLost");
+
 
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {
