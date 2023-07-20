@@ -4,8 +4,8 @@ package com.chervonnaya.quest.controller;
 import com.chervonnaya.quest.model.Answer;
 import com.chervonnaya.quest.model.ChoiceType;
 import com.chervonnaya.quest.model.Question;
-import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.repository.QuestionRepository;
+import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.service.StatisticsUtil;
 import lombok.extern.slf4j.Slf4j;
 

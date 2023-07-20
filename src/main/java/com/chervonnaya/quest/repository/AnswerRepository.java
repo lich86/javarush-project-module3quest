@@ -21,54 +21,54 @@ public class AnswerRepository {
     private Answer answer7;
     private Answer answer8;
 
-     {
-         answer1 = Answer.builder()
-                 .id(0)
-                 .content("Вперёд, навстречу приключениям!")
-                 .choiceType(ChoiceType.HASNEXT)
-                 .nextQuestionId(2)
-                 .build();
-         answer2 = Answer.builder()
-                 .id(2)
-                 .content("Я лучше дома посижу и на диване полежу")
-                 .choiceType(ChoiceType.LOST)
-                 .loosingCause(new LoosingCause(1, "Всадники на черных лошадях врываются в твой дом, отбирают кольцо и убивают тебя."))
-                 .build();
-         answer3 = Answer.builder()
-                 .id(3)
-                 .content("Умный горы обойдет, а мы пойдём в горы, точнее под горой")
-                 .choiceType(ChoiceType.HASNEXT)
-                 .nextQuestionId(3)
-                 .build();
-         answer4 = Answer.builder()
-                 .id(4)
-                 .content("Нам поможет заграница, то есть белый маг Басурман")
-                 .choiceType(ChoiceType.LOST)
-                 .loosingCause(new LoosingCause(2, "Белый маг оказывается предателем. Кольцо в руках врага. Ты и твои спутники убиты орками."))
-                 .build();
-         answer5 = Answer.builder()
-                 .id(5)
-                 .content("Эти гигантские орлы, пахнущие мертвечиной, кажутся отличнымм решением вопроса")
-                 .choiceType(ChoiceType.HASNEXT)
-                 .nextQuestionId(4)
-                 .build();
-         answer6 = Answer.builder()
-                 .id(6)
-                 .content("Лес с мирными симпатичными живыми деревьями. Что может случиться плохого?")
-                 .choiceType(ChoiceType.LOST)
-                 .loosingCause(new LoosingCause(3, "Живые деревья оказываются людоедами. Ты и твои спутники съедены."))
-                 .build();
-         answer7 = Answer.builder()
-                 .id(7)
-                 .content("Гори оно синим пламенем. Бросить в жерло вулкана")
-                 .choiceType(ChoiceType.WIN)
-                 .build();
-         answer8 = Answer.builder()
-                 .id(8)
-                 .content("Оставить себе, оно такое блестящее, моя прелесть…")
-                 .choiceType(ChoiceType.LOST)
-                 .loosingCause(new LoosingCause(4, "Хозяин кольца подаёт на вас в суд, который затягивается на 100 лет. В результате отсуживает у вас нору под холмом и право видеться с ребенком. Ой нет, это уже из другой истории…"))
-                 .build();
+    {
+        answer1 = Answer.builder()
+                .id(1)
+                .text("Вперёд, навстречу приключениям!")
+                .choiceType(ChoiceType.HASNEXT)
+                .nextQuestionId(2)
+                .build();
+        answer2 = Answer.builder()
+                .id(2)
+                .text("Я лучше дома посижу и на диване полежу")
+                .choiceType(ChoiceType.LOST)
+                .loosingCause(new LoosingCause(1, "Всадники на черных лошадях врываются в твой дом, отбирают кольцо и убивают тебя."))
+                .build();
+        answer3 = Answer.builder()
+                .id(3)
+                .text("Умный горы обойдет, а мы пойдём в горы, точнее под горой")
+                .choiceType(ChoiceType.HASNEXT)
+                .nextQuestionId(3)
+                .build();
+        answer4 = Answer.builder()
+                .id(4)
+                .text("Нам поможет заграница, то есть белый маг Басурман")
+                .choiceType(ChoiceType.LOST)
+                .loosingCause(new LoosingCause(2, "Белый маг оказывается предателем. Кольцо в руках врага. Ты и твои спутники убиты орками."))
+                .build();
+        answer5 = Answer.builder()
+                .id(5)
+                .text("Эти гигантские орлы, пахнущие мертвечиной, кажутся отличнымм решением вопроса")
+                .choiceType(ChoiceType.HASNEXT)
+                .nextQuestionId(4)
+                .build();
+        answer6 = Answer.builder()
+                .id(6)
+                .text("Лес с мирными симпатичными живыми деревьями. Что может случиться плохого?")
+                .choiceType(ChoiceType.LOST)
+                .loosingCause(new LoosingCause(3, "Живые деревья оказываются людоедами. Ты и твои спутники съедены."))
+                .build();
+        answer7 = Answer.builder()
+                .id(7)
+                .text("Гори оно синим пламенем. Бросить в жерло вулкана")
+                .choiceType(ChoiceType.WIN)
+                .build();
+        answer8 = Answer.builder()
+                .id(8)
+                .text("Оставить себе, оно такое блестящее, моя прелесть…")
+                .choiceType(ChoiceType.LOST)
+                .loosingCause(new LoosingCause(4, "Хозяин кольца подаёт на вас в суд, который затягивается на 100 лет. В результате отсуживает у вас нору под холмом и право видеться с ребенком. Ой нет, это уже из другой истории…"))
+                .build();
 
     }
 
@@ -84,7 +84,13 @@ public class AnswerRepository {
     }
 
     public Answer getAnswerById(int id) {
-         return answerHashMap.get(id);
+        Answer answer = answerHashMap.get(id);
+        if(answer != null) {
+            return answer;
+        } else {
+            log.error("Ответа с id [{}] не существует", id);
+            throw new NullPointerException("Ответа с нужным индексом не существует");
+        }
     }
 
 

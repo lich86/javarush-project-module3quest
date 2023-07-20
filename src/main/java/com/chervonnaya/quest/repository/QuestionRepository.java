@@ -1,9 +1,11 @@
 package com.chervonnaya.quest.repository;
 
 import com.chervonnaya.quest.model.Question;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 
+@Slf4j
 public class QuestionRepository {
 
     private final AnswerRepository answerRepository = new AnswerRepository();
@@ -37,7 +39,13 @@ public class QuestionRepository {
     }
 
     public Question getQuestionById(int id) {
-        return questionHashMap.get(id);
+        Question question = questionHashMap.get(id);
+        if(question != null) {
+            return question;
+        } else {
+            log.error("Вопроса с id [{}] не существует", id);
+            throw new NullPointerException("Вопроса с нужным индексом не существует");
+        }
     }
 
 }
