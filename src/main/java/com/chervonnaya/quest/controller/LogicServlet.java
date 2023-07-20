@@ -7,6 +7,7 @@ import com.chervonnaya.quest.model.Question;
 import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.repository.QuestionRepository;
 import com.chervonnaya.quest.service.StatisticsUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@Slf4j
 @WebServlet(name = "LogicServlet", value = "/game")
 public class LogicServlet extends HttpServlet {
 
@@ -26,7 +28,6 @@ public class LogicServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Получаем текущую сессию
         HttpSession currentSession = request.getSession();
         request.setCharacterEncoding("UTF-8");
 
@@ -49,12 +50,18 @@ public class LogicServlet extends HttpServlet {
                 try {
                     questionId = answer.getNextQuestionId();
                 } catch (NullPointerException e) {
-                    //у вопроса нет такого поля, логи
+                    log.error("У вопроса [{}] нет поля nextQuestion", questionId);
+                    getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
                 }
                 chapterNumber = StatisticsUtil.getStatistics(request, response,"chapterNumber");
                 chapterNumber++;
             } else if (answer.getChoiceType() == ChoiceType.LOST) {
-                request.setAttribute("loosingCause", answer.getLoosingCause().getText());
+                try {
+                    request.setAttribute("loosingCause", answer.getLoosingCause().getText());
+                } catch (NullPointerException e) {
+                    log.error("У вопроса [{}] нет поля loosingCause", answer.getId());
+                    request.setAttribute("loosingCause", "Вы проиграли!");
+                }
                 StatisticsUtil.setStatistics(request, response,"counter", ++counter);
                 StatisticsUtil.setStatistics(request, response,"counterLost", ++counterLost);
                 getServletContext().getRequestDispatcher("/gameover.jsp").forward(request, response);
@@ -63,23 +70,26 @@ public class LogicServlet extends HttpServlet {
                 StatisticsUtil.setStatistics(request, response,"counterWon", ++counterWon);
                 getServletContext().getRequestDispatcher("/youwon.jsp").forward(request, response);
             } else {
-                //тут какая-то ошибка, нужно логировать
+                log.error("У вопроса [{}] нет поля ChoiceType, либо в нём ошибка", answer.getId());
+                getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
             }
         }
 
-        Question question;
-        ArrayList<Answer> answers;
+        Question question = null;
+        ArrayList<Answer> answers = null;
         try {
             question = questionRepository.getQuestionById(questionId);
             answers = question.getAnswers();
-            Collections.shuffle(answers);
-            request.setAttribute("question", question);
-            request.setAttribute("answers", answers);
-            currentSession.setAttribute("chapterNumber", chapterNumber);
         } catch (NullPointerException e) {
             //вопроса или ответа с таким номером не существует
-
+            log.error("Проблема с вопросом id [{}] (нет такого вопроса, либо у него не установлены ответы)", questionId);
+            getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
         }
+
+        Collections.shuffle(answers);
+        request.setAttribute("question", question);
+        request.setAttribute("answers", answers);
+        currentSession.setAttribute("chapterNumber", chapterNumber);
 
         getServletContext().getRequestDispatcher("/play.jsp").forward(request, response);
     }

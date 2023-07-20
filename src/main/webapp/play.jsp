@@ -1,10 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Квест Lord of the wings</title>
     <link href="static/main.css?v=1.0" rel="stylesheet">
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <script src="<c:url value="/static/jquery-3.6.0.min.js"/>"></script>
 </head>
 <body>
 
@@ -47,6 +48,24 @@
         Поражений: ${cookie.counterLost.value}<br>
         Ваш IP адрес: ${IP}
     </div>
+
+<script>
+    /*проверка ,что форма не пустая*/
+
+    $("#login").submit(function(e) {
+        e.preventDefault();
+        var username = $.trim($("#username").val());
+        if (username.length > 0) {
+            $.post('/game', {username: username},
+                function(returnedData){
+                    $('body').html(returnedData);
+                });
+        } else {
+            alert('Вы забыли представиться');
+        }
+    });
+
+</script>
 
 
 </body>
