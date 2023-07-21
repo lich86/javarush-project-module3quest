@@ -32,8 +32,8 @@
 
     <div>
         <form action="/game" method="post">
-            <c:forEach items="${answers}" var="answer">
-                <label><input type="radio" name="answerid" value="${answer.id}">${answer.text}</label><br><br>
+            <c:forEach items="${answers}" var="answer" varStatus="loop">
+                <label><input type="radio" name="answerid" value="${answer.id}" <c:if test="${loop.index == 0}">checked="checked"</c:if>>${answer.text}</label><br><br>
             </c:forEach>
             <button type="submit">Ответить</button>
         </form>

@@ -20,13 +20,13 @@ public class QuestionRepository {
      {
          question1 = new Question(1, "Итак, пришло время сделать решительный шаг. Ты отправишься в путешествие?",
                 answerRepository.getAnswerById(1), answerRepository.getAnswerById(2));
-         question2 = new Question(2, "Ты и твои спутники благополучно добираетесь до обители эльфов\n" +
+         question2 = new Question(2, "Ты и твои спутники благополучно добираетесь до обители эльфов<br>" +
                  "На совете народов принято решение выступить в путь. Куда вы отправитесь?",
                  answerRepository.getAnswerById(3), answerRepository.getAnswerById(4));
-         question3 = new Question(3, "Под горой в неравной схватке с альцгеймером вы теряете мага Пендальфа\n" +
+         question3 = new Question(3, "Под горой в неравной схватке с альцгеймером вы теряете мага Пендальфа<br>" +
                  "Куда дальше?",
                  answerRepository.getAnswerById(5), answerRepository.getAnswerById(6));
-         question4 = new Question(4, "Гигантские орлы оказываются мирными птицами и соглашаются отнести вас к огненной горе\n" +
+         question4 = new Question(4, "Гигантские орлы оказываются мирными птицами и соглашаются отнести вас к огненной горе<br>" +
                  "Что делать с кольцом?",
                  answerRepository.getAnswerById(7), answerRepository.getAnswerById(8));
     }

@@ -56,9 +56,13 @@ public class LogicServlet extends HttpServlet {
                 } catch (NullPointerException e) {
                     log.error("У вопроса [{}] нет поля nextQuestion", questionId);
                     getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
+                    return;
                 }
-                chapterNumber = StatisticsUtil.getStatistics(request, response,"chapterNumber");
-                chapterNumber++;
+                if(currentSession.getAttribute("chapterNumber") != null) {
+                    chapterNumber = (int) currentSession.getAttribute("chapterNumber");
+                    chapterNumber++;
+                }
+
             } else if (answer.getChoiceType() == ChoiceType.LOST) {
                 try {
                     request.setAttribute("loosingCause", answer.getLoosingCause().getText());
