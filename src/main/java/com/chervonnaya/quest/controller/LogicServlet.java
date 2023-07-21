@@ -7,6 +7,8 @@ import com.chervonnaya.quest.model.Question;
 import com.chervonnaya.quest.repository.QuestionRepository;
 import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.service.StatisticsUtil;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -19,12 +21,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Slf4j
 @WebServlet(name = "LogicServlet", value = "/game")
 public class LogicServlet extends HttpServlet {
 
-    private final AnswerRepository answerRepository = new AnswerRepository();
-    private final QuestionRepository questionRepository = new QuestionRepository();
+    private AnswerRepository answerRepository = new AnswerRepository();
+    private QuestionRepository questionRepository = new QuestionRepository();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,10 +69,12 @@ public class LogicServlet extends HttpServlet {
                 StatisticsUtil.setStatistics(request, response,"counter", ++counter);
                 StatisticsUtil.setStatistics(request, response,"counterLost", ++counterLost);
                 getServletContext().getRequestDispatcher("/gameover.jsp").forward(request, response);
+                return;
             } else if(answer.getChoiceType() == ChoiceType.WIN) {
                 StatisticsUtil.setStatistics(request, response,"counter", ++counter);
                 StatisticsUtil.setStatistics(request, response,"counterWon", ++counterWon);
                 getServletContext().getRequestDispatcher("/youwon.jsp").forward(request, response);
+                return;
             } else {
                 log.error("У вопроса [{}] нет поля ChoiceType, либо в нём ошибка", answer.getId());
                 getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
