@@ -7,7 +7,6 @@ import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.repository.QuestionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
@@ -53,8 +52,6 @@ class LogicServletTest extends Mockito {
         Mockito.when(requestMock.getSession()).thenReturn(currentSessionMock);
         logicServletMock.init(configMock);
         Mockito.when(configMock.getServletContext()).thenReturn(servletContextMock);
-        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
-                .thenReturn(dispatcherMock);
 
         Mockito.when(currentSessionMock.getAttribute("username")).thenReturn("Елизавета");
         Mockito.when(requestMock.getParameter("answerid")).thenReturn("1");
@@ -72,6 +69,8 @@ class LogicServletTest extends Mockito {
         String username = "Елизавета";
         Mockito.when(currentSessionMock.getAttribute("username")).thenReturn(null);
         Mockito.when(requestMock.getParameter("username")).thenReturn(username);
+        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
+                .thenReturn(dispatcherMock);
 
         logicServletMock.doPost(requestMock, responseMock);
 
@@ -81,6 +80,8 @@ class LogicServletTest extends Mockito {
     @Test
     void doPost_Should_SetNextQuestionIdIfHasNext() throws ServletException, IOException {
         Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.HASNEXT);
+        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
+                .thenReturn(dispatcherMock);
 
         logicServletMock.doPost(requestMock, responseMock);
 
@@ -88,8 +89,21 @@ class LogicServletTest extends Mockito {
     }
 
     @Test
+    void doPost_Should_ForwardToPlayJspIfHasNext() throws ServletException, IOException {
+        Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.HASNEXT);
+        Mockito.when(servletContextMock.getRequestDispatcher("/play.jsp"))
+                .thenReturn(dispatcherMock);
+
+        logicServletMock.doPost(requestMock, responseMock);
+
+        Mockito.verify(dispatcherMock).forward(requestMock, responseMock);
+    }
+
+    @Test
     void doPost_Should_SetLoosingCauseIfLost() throws ServletException, IOException {
         Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.LOST);
+        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
+                .thenReturn(dispatcherMock);
 
         logicServletMock.doPost(requestMock, responseMock);
 
@@ -97,10 +111,21 @@ class LogicServletTest extends Mockito {
     }
 
     @Test
-    @Disabled
     void doPost_Should_ForwardToGameOverJspIfLost() throws ServletException, IOException {
         Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.LOST);
-        Mockito.when(servletContextMock.getRequestDispatcher("/gameover1.jsp"))
+        Mockito.when(servletContextMock.getRequestDispatcher("/gameover.jsp"))
+                .thenReturn(dispatcherMock);
+
+        logicServletMock.doPost(requestMock, responseMock);
+
+        Mockito.verify(dispatcherMock).forward(requestMock, responseMock);
+    }
+
+
+    @Test
+    void doPost_Should_ForwardToPlayJspIfWin() throws ServletException, IOException {
+        Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.WIN);
+        Mockito.when(servletContextMock.getRequestDispatcher("/youwon.jsp"))
                 .thenReturn(dispatcherMock);
 
         logicServletMock.doPost(requestMock, responseMock);
@@ -111,6 +136,8 @@ class LogicServletTest extends Mockito {
     @Test
     void doPost_Should_SetAttributeQuestionIfHasNext() throws ServletException, IOException {
         Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.HASNEXT);
+        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
+                .thenReturn(dispatcherMock);
 
         logicServletMock.doPost(requestMock, responseMock);
 
@@ -121,6 +148,8 @@ class LogicServletTest extends Mockito {
     void doPost_Should_SetAttributeAnswersIfHasNext() throws ServletException, IOException {
         Mockito.when(answerMock.getChoiceType()).thenReturn(ChoiceType.HASNEXT);
         Mockito.when(questionMock.getAnswers()).thenReturn(new ArrayList<>());
+        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
+                .thenReturn(dispatcherMock);
 
         logicServletMock.doPost(requestMock, responseMock);
 

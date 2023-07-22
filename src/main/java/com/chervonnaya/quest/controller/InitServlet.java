@@ -18,13 +18,14 @@ public class InitServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Создание новой сессии
         HttpSession currentSession = request.getSession(true);
-        ServletContext selvletContext = getServletContext();
+        ServletContext servletContext = getServletContext();
 
         StatisticsUtil.getStatistics(request, response,"counter");
         StatisticsUtil.getStatistics(request, response,"counterWon");
         StatisticsUtil.getStatistics(request, response,"counterLost");
-        if(selvletContext.getAttribute("startup") == null) {
-            selvletContext.setAttribute("startup", new Date());
+
+        if(servletContext.getAttribute("startup") == null) {
+            servletContext.setAttribute("startup", new Date());
         }
 
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
