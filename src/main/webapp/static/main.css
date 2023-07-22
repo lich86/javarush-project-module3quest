@@ -22,4 +22,5 @@ input[type=submit], button {
     font-family: auto;
     color: #fff;
     border: none;
+    cursor: pointer;
 }

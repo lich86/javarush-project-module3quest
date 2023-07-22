@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>Вы проиграли!</title>
-  <link href="static/main.css?$v=1.0" rel="stylesheet">
+  <link href="static/main.css?$v=${startup.time}" rel="stylesheet">
   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   <script src="<c:url value="/static/jquery-3.6.0.min.js"/>"></script>
 </head>
