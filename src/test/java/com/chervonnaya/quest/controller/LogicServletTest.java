@@ -5,9 +5,12 @@ import com.chervonnaya.quest.model.ChoiceType;
 import com.chervonnaya.quest.model.Question;
 import com.chervonnaya.quest.repository.AnswerRepository;
 import com.chervonnaya.quest.repository.QuestionRepository;
+import com.chervonnaya.quest.service.StatisticsUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 
 import javax.servlet.RequestDispatcher;
@@ -75,6 +78,17 @@ class LogicServletTest extends Mockito {
         logicServletMock.doPost(requestMock, responseMock);
 
         Mockito.verify(currentSessionMock).setAttribute("username", username);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"counter", "counterLost", "counterWon"})
+    void doPost_Should_GetAllStatistic(String attribute) throws ServletException, IOException {
+        Mockito.when(logicServletMock.getServletContext().getRequestDispatcher(anyString()))
+                .thenReturn(dispatcherMock);
+        try (MockedStatic<StatisticsUtil> statisticsUtilMockedStatic = Mockito.mockStatic(StatisticsUtil.class)){
+            logicServletMock.doPost(requestMock, responseMock);
+            statisticsUtilMockedStatic.verify(() -> StatisticsUtil.getStatistics(requestMock, responseMock,attribute));
+        }
     }
 
     @Test

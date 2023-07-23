@@ -84,7 +84,6 @@ public class LogicServlet extends HttpServlet {
                 getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
             }
         }
-
         Question question;
         ArrayList<Answer> answers;
         try {

@@ -1,11 +1,8 @@
 package com.chervonnaya.quest.controller;
 
-import com.chervonnaya.quest.service.StatisticsUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 
 import javax.servlet.RequestDispatcher;
@@ -48,15 +45,6 @@ class InitServletTest extends Mockito {
     @AfterEach
     void closeService() throws Exception {
         closeable.close();
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"counter", "counterLost", "counterWon"})
-    void doGet_Should_GetAllStatistic(String attribute) throws ServletException, IOException {
-        try (MockedStatic<StatisticsUtil> statisticsUtilMockedStatic = Mockito.mockStatic(StatisticsUtil.class)){
-            initServletSpy.doGet(requestMock, responseMock);
-            statisticsUtilMockedStatic.verify(() -> StatisticsUtil.getStatistics(requestMock, responseMock,attribute));
-        }
     }
 
     @Test

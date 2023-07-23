@@ -3,11 +3,13 @@ package com.chervonnaya.quest.repository;
 import com.chervonnaya.quest.model.Answer;
 import com.chervonnaya.quest.model.ChoiceType;
 import com.chervonnaya.quest.model.LoosingCause;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 
 @Slf4j
+@ToString
 public class AnswerRepository {
 
     private final HashMap<Integer, Answer> answerHashMap = new HashMap<>();
@@ -92,6 +94,8 @@ public class AnswerRepository {
             throw new NullPointerException("Ответа с нужным индексом не существует");
         }
     }
+
+
 
 
 

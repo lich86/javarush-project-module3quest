@@ -1,7 +1,5 @@
 package com.chervonnaya.quest.controller;
 
-import com.chervonnaya.quest.service.StatisticsUtil;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,10 +17,6 @@ public class InitServlet extends HttpServlet {
         // Создание новой сессии
         HttpSession currentSession = request.getSession(true);
         ServletContext servletContext = getServletContext();
-
-        StatisticsUtil.getStatistics(request, response,"counter");
-        StatisticsUtil.getStatistics(request, response,"counterWon");
-        StatisticsUtil.getStatistics(request, response,"counterLost");
 
         if(servletContext.getAttribute("startup") == null) {
             servletContext.setAttribute("startup", new Date());
