@@ -54,7 +54,7 @@ public class LogicServlet extends HttpServlet {
                 try {
                     questionId = answer.getNextQuestionId();
                 } catch (NullPointerException e) {
-                    log.error("У вопроса [{}] нет поля nextQuestion", questionId);
+                    log.error("У ответа [{}] нет поля nextQuestion", answerId);
                     getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
                     return;
                 }
@@ -84,6 +84,7 @@ public class LogicServlet extends HttpServlet {
                 getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
             }
         }
+
         Question question;
         ArrayList<Answer> answers;
         try {
