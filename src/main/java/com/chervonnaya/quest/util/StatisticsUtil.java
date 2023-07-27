@@ -1,4 +1,4 @@
-package com.chervonnaya.quest.service;
+package com.chervonnaya.quest.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
