@@ -22,8 +22,8 @@ public class QuestServiceImpl implements QuestService{
     private HttpSession currentSession;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private AnswerRepository answerRepository = new AnswerRepository();
-    private QuestionRepository questionRepository = new QuestionRepository();
+    private final AnswerRepository answerRepository = new AnswerRepository();
+    private final QuestionRepository questionRepository = new QuestionRepository();
 
     public QuestServiceImpl(HttpSession currentSession, HttpServletRequest request, HttpServletResponse response) {
         this.currentSession = currentSession;
